@@ -94,3 +94,5 @@ FOCAR EM VER COMO PUBLICA..
 [https://agricultura-urbana-saude.onrender.com] nome escolhido
 fazer o deploy
 
+----> 🎉 Deu certo! O git push foi bem-sucedido! 🎉
+----> 🚀 Próximo passo: publicar no Render.com
