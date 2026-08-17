@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block title %}Início - Hortas nos Centros de Saúde
+e Caps{% endblock %} {% block content %}
+<div class="container mt-4">
+  <!-- Hero -->
+  <div class="row">
+    <div class="col-12 text-center py-5">
+      <h1 class="display-4 fw-bold" style="color: var(--verde-escuro)">
+        <i class="fas fa-seedling" style="color: var(--verde-claro)"></i>
+        Hortas nos Centros de Saúde e Caps
+      </h1>
+      <p class="lead text-muted">
+        Conectando comunidades através de hortas medicinais nos Centros de Saúde
+        e Caps de Florianópolis
+      </p>
+      <a href="{{ url_for('mapa') }}" class="btn btn-verde btn-lg mt-3">
+        <i class="fas fa-map-marked-alt me-2"></i>Ver Mapa das Hortas
+      </a>
+    </div>
+  </div>
+
+  <!-- Cards de Exemplo -->
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card-horta">
+        <div class="card-header">
+          <i class="fas fa-users me-2"></i>Comunidade
+        </div>
+        <div class="card-body">
+          <p>Hortas comunitárias que promovem saúde e bem-estar.</p>
+          <span class="badge-ativa">Ativa</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-horta">
+        <div class="card-header">
+          <i class="fas fa-leaf me-2"></i>Plantas Medicinais
+        </div>
+        <div class="card-body">
+          <p>Diversas espécies de plantas medicinais cultivadas.</p>
+          <span class="badge-grupo"
+            ><i class="fas fa-users me-1"></i>Grupo</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-horta">
+        <div class="card-header">
+          <i class="fas fa-calendar-alt me-2"></i>Eventos
+        </div>
+        <div class="card-body">
+          <p>Multirões e encontros semanais para cuidar das hortas.</p>
+          <span class="badge-multirao"
+            ><i class="fas fa-calendar me-1"></i>Multirão</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

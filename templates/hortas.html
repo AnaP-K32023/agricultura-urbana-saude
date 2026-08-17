@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %}Hortas - Hortas nos Centro de Saúde e
+Caps{% endblock %} {% block content %}
+<div class="container mt-4">
+  <h2 class="section-title"><i class="fas fa-list me-2"></i>Nossas Hortas</h2>
+
+  <div class="row">
+    {% for horta in hortas %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card-horta">
+        <div class="card-header">
+          <i class="fas fa-seedling me-2"></i>
+          {{ horta.centro_saude }} {% if horta.horta_ativa %}
+          <span class="badge-ativa float-end">Ativa</span>
+          {% else %}
+          <span class="badge-inativa float-end">Inativa</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <p>
+            <i
+              class="fas fa-map-pin me-2"
+              style="color: var(--verde-claro)"
+            ></i>
+            <strong>Região:</strong> {{ horta.regiao }}
+          </p>
+
+          <p>
+            <i class="fas fa-user me-2" style="color: var(--verde-claro)"></i>
+            <strong>Responsável:</strong> {{ horta.responsavel or '-' }}
+          </p>
+
+          <p>
+            <i class="fas fa-leaf me-2" style="color: var(--verde-claro)"></i>
+            <strong>Plantas:</strong><br />
+            <span style="font-size: 0.9rem"
+              >{{ horta.plantas_medicinais or '-' }}</span
+            >
+          </p>
+
+          {% if horta.dia_grupo_horta %}
+          <p>
+            <span class="badge-grupo">
+              <i class="fas fa-users me-1"></i>{{ horta.dia_grupo_horta }}
+            </span>
+          </p>
+          {% endif %} {% if horta.multirao and horta.multirao != 'Não' %}
+          <p>
+            <span class="badge-multirao">
+              <i class="fas fa-calendar me-1"></i>Multirão: {{ horta.multirao }}
+            </span>
+          </p>
+          {% endif %} {% if horta.data_atualizacao %}
+          <p class="text-muted small mt-2">
+            <i class="far fa-calendar-alt me-1"></i>
+            Atualizado: {{ horta.data_atualizacao }}
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

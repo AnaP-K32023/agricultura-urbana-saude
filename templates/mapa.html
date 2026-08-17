@@ -1,0 +1,181 @@
+{% extends "base.html" %} {% block title %}Mapa - Horta Urbana{% endblock %} {%
+block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="section-title">
+        <i class="fas fa-map-marked-alt me-2"></i>Mapa das Hortas nos CS e Caps
+      </h2>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="ativa">Ativas</button>
+      <button class="filter-btn" data-filter="inativa">Inativas</button>
+      <button class="filter-btn" data-filter="Norte">Norte</button>
+      <button class="filter-btn" data-filter="Sul">Sul</button>
+      <button class="filter-btn" data-filter="Centro">Centro</button>
+    </div>
+  </div>
+
+  <!-- Mapa -->
+  <div class="row">
+    <div class="col-12">
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  let map;
+  let markers = [];
+  let geojsonData = null;
+
+  function initMap() {
+    map = L.map("map").setView([-27.59, -48.55], 11);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+    }).addTo(map);
+
+    loadData();
+  }
+
+  async function loadData() {
+    try {
+      const response = await fetch("/api/hortas");
+      geojsonData = await response.json();
+      addMarkers(geojsonData);
+      updateResumo();
+    } catch (error) {
+      console.error("Erro:", error);
+    }
+  }
+
+  function addMarkers(data) {
+    // Limpar marcadores anteriores
+    if (markers.length > 0) {
+      markers.forEach((marker) => map.removeLayer(marker));
+      markers = [];
+    }
+
+    const markerCluster = L.markerClusterGroup({
+      maxClusterRadius: 50,
+    });
+
+    data.features.forEach((feature) => {
+      const props = feature.properties;
+      const coords = feature.geometry.coordinates;
+
+      let color = props.ativa ? "#4CAF50" : "#dc3545";
+      let iconType = props.ativa ? "fa-seedling" : "fa-times-circle";
+
+      const icon = L.divIcon({
+        className: "custom-div-icon",
+        html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                    <i class="fas ${iconType}" style="color: white; font-size: 14px;"></i>
+                  </div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+      });
+
+      const popupContent = `
+            <div style="min-width: 200px;">
+                <h6 style="color: #2E7D32; font-weight: 600;">${props.nome}</h6>
+                <p><strong>Região:</strong> ${props.regiao}</p>
+                <p><strong>Status:</strong> ${props.ativa ? "✅ Ativa" : "❌ Inativa"}</p>
+                <p><strong>Responsável:</strong> ${props.responsavel || "-"}</p>
+                <p><strong>Plantas:</strong> ${props.plantas_medicinais || "-"}</p>
+                ${props.dia_grupo_horta ? `<p><span class="badge-grupo"><i class="fas fa-users me-1"></i>${props.dia_grupo_horta}</span></p>` : ""}
+                ${props.multirao ? `<p><span class="badge-multirao"><i class="fas fa-calendar me-1"></i>${props.multirao}</span></p>` : ""}
+            </div>
+        `;
+
+      const marker = L.marker([coords[1], coords[0]], { icon }).bindPopup(
+        popupContent,
+        { maxWidth: 300 },
+      );
+
+      markerCluster.addLayer(marker);
+      markers.push(marker);
+    });
+
+    map.addLayer(markerCluster);
+
+    // Ajustar zoom
+    if (data.features.length > 0) {
+      const bounds = L.latLngBounds(
+        data.features.map((f) => [
+          f.geometry.coordinates[1],
+          f.geometry.coordinates[0],
+        ]),
+      );
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+
+  function updateResumo() {
+    fetch("/api/resumo")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Resumo:", data);
+      })
+      .catch((error) => console.error("Erro:", error));
+  }
+
+  // Filtros
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      document
+        .querySelectorAll(".filter-btn")
+        .forEach((b) => b.classList.remove("active"));
+      this.classList.add("active");
+
+      const filter = this.dataset.filter;
+      applyFilter(filter);
+    });
+  });
+
+  function applyFilter(filter) {
+    if (!geojsonData) return;
+
+    let filteredData;
+
+    if (filter === "all") {
+      filteredData = geojsonData;
+    } else if (filter === "ativa") {
+      filteredData = {
+        ...geojsonData,
+        features: geojsonData.features.filter(
+          (f) => f.properties.ativa === true,
+        ),
+      };
+    } else if (filter === "inativa") {
+      filteredData = {
+        ...geojsonData,
+        features: geojsonData.features.filter(
+          (f) => f.properties.ativa === false,
+        ),
+      };
+    } else {
+      filteredData = {
+        ...geojsonData,
+        features: geojsonData.features.filter(
+          (f) => f.properties.regiao === filter,
+        ),
+      };
+    }
+
+    // Remover marcadores antigos
+    markers.forEach((marker) => map.removeLayer(marker));
+    markers = [];
+    addMarkers(filteredData);
+  }
+
+  // Iniciar
+  document.addEventListener("DOMContentLoaded", initMap);
+</script>
+{% endblock %}
