@@ -1,64 +1,104 @@
-{% extends "base.html" %} {% block title %}Hortas - Hortas nos Centro de Saúde e
-Caps{% endblock %} {% block content %}
-<div class="container mt-4">
-  <h2 class="section-title"><i class="fas fa-list me-2"></i>Nossas Hortas</h2>
+{% extends "!doctype html.txt" %} {% block content %}
+<div class="container py-4">
+  <h2 class="section-title text-center">Nossas Hortas</h2>
+  <p class="text-center text-muted mb-4">
+    Conheça as hortas comunitárias nos Centros de Saúde e Caps.
+  </p>
 
-  <div class="row">
+  <!-- ===== ÁREA DOS BOTÕES DE FILTRO ===== -->
+  <div class="filter-container text-center mb-4">
+    <button class="filter-btn active" onclick="filtrarHortas('todos')">
+      Todos
+    </button>
+    <button class="filter-btn" onclick="filtrarHortas('ativas')">Ativas</button>
+    <button class="filter-btn" onclick="filtrarHortas('inativas')">
+      Inativas
+    </button>
+    <button class="filter-btn" onclick="filtrarHortas('Norte')">Norte</button>
+    <button class="filter-btn" onclick="filtrarHortas('Sul')">Sul</button>
+    <button class="filter-btn" onclick="filtrarHortas('Centro')">Centro</button>
+  </div>
+
+  <!-- ===== LISTAGEM DAS HORTAS ===== -->
+  <div class="row" id="lista-hortas">
     {% for horta in hortas %}
-    <div class="col-md-6 col-lg-4">
-      <div class="card-horta">
+    <div
+      class="col-md-4 horta-item"
+      data-status="{{ horta.horta_ativa }}"
+      data-regiao="{{ horta.regiao }}"
+    >
+      <div class="card card-horta h-100">
         <div class="card-header">
-          <i class="fas fa-seedling me-2"></i>
-          {{ horta.centro_saude }} {% if horta.horta_ativa %}
-          <span class="badge-ativa float-end">Ativa</span>
-          {% else %}
-          <span class="badge-inativa float-end">Inativa</span>
-          {% endif %}
+          <i class="fas fa-leaf me-2"></i>{{ horta.centro_saude }}
         </div>
         <div class="card-body">
-          <p>
-            <i
-              class="fas fa-map-pin me-2"
-              style="color: var(--verde-claro)"
-            ></i>
-            <strong>Região:</strong> {{ horta.regiao }}
-          </p>
-
-          <p>
-            <i class="fas fa-user me-2" style="color: var(--verde-claro)"></i>
-            <strong>Responsável:</strong> {{ horta.responsavel or '-' }}
-          </p>
-
-          <p>
-            <i class="fas fa-leaf me-2" style="color: var(--verde-claro)"></i>
-            <strong>Plantas:</strong><br />
-            <span style="font-size: 0.9rem"
-              >{{ horta.plantas_medicinais or '-' }}</span
-            >
-          </p>
+          <p><strong>Responsável:</strong> {{ horta.responsavel }}</p>
+          <p><strong>Plantas:</strong> {{ horta.plantas_medicinais }}</p>
 
           {% if horta.dia_grupo_horta %}
           <p>
-            <span class="badge-grupo">
-              <i class="fas fa-users me-1"></i>{{ horta.dia_grupo_horta }}
-            </span>
-          </p>
-          {% endif %} {% if horta.mutirão and horta.mutirão != 'Não' %}
-          <p>
-            <span class="badge-mutirão">
-              <i class="fas fa-calendar me-1"></i>Mutirão: {{ horta.mutirao }}
-            </span>
-          </p>
-          {% endif %} {% if horta.data_atualizacao %}
-          <p class="text-muted small mt-2">
-            <i class="far fa-calendar-alt me-1"></i>
-            Atualizado: {{ horta.data_atualizacao }}
+            <i class="fas fa-users me-1 text-primary"></i> {{
+            horta.dia_grupo_horta }}
           </p>
           {% endif %}
+
+          <!-- ===== BADGES DE STATUS E EVENTOS ===== -->
+          <div class="mt-3">
+            {% if horta.horta_ativa == True %}
+            <span class="badge-ativa"
+              ><i class="fas fa-check-circle me-1"></i>Ativa</span
+            >
+            {% else %}
+            <span class="badge-inativa"
+              ><i class="fas fa-times-circle me-1"></i>Inativa</span
+            >
+            {% endif %} {% if horta.multirao and horta.multirao != 'Não' %}
+            <span class="badge-multirao"
+              ><i class="fas fa-calendar me-1"></i>Mutirão: {{ horta.multirao
+              }}</span
+            >
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
 </div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Função de filtro
+  function filtrarHortas(filtro) {
+    // 1. Atualizar o botão ativo
+    const botoes = document.querySelectorAll(".filter-btn");
+    botoes.forEach((btn) => btn.classList.remove("active"));
+    event.target.classList.add("active");
+
+    // 2. Filtrar os cards
+    const itens = document.querySelectorAll(".horta-item");
+    itens.forEach((item) => {
+      const status = item.getAttribute("data-status"); // Retorna "True" ou "False" como texto
+      const regiao = item.getAttribute("data-regiao");
+
+      let mostrar = false;
+
+      if (filtro === "todos") {
+        mostrar = true;
+      } else if (filtro === "ativas" && status === "True") {
+        mostrar = true;
+      } else if (filtro === "inativas" && status === "False") {
+        mostrar = true;
+      } else if (filtro === regiao) {
+        mostrar = true;
+      }
+
+      // Mostra ou esconde
+      if (mostrar) {
+        item.style.display = ""; // Mostra (usa o padrão do Bootstrap col-md-4)
+      } else {
+        item.style.display = "none"; // Esconde
+      }
+    });
+  }
+</script>
 {% endblock %}
