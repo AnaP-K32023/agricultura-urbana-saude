@@ -26,7 +26,7 @@ def carregar_dados():
             'responsavel': 'Jardim Saúde Ativa',
             'plantas_medicinais': 'Erva baleeira, Espinheira santa, Boldo, Hortelã',
             'dia_grupo_horta': 'Quarta-feira 14h',
-            'multirao': '15/07/2026',
+            'mutirão': '15/07/2026',
             'data_atualizacao': '2026-06-15'
         },
         {
@@ -38,7 +38,7 @@ def carregar_dados():
             'responsavel': 'Maria Silva',
             'plantas_medicinais': 'Hortelã, Boldo, Melissa, Alecrim',
             'dia_grupo_horta': 'Terça-feira 09h',
-            'multirao': 'Não',
+            'mutirão': 'Não',
             'data_atualizacao': '2026-06-10'
         },
         {
@@ -50,7 +50,7 @@ def carregar_dados():
             'responsavel': 'Carlos Alberto',
             'plantas_medicinais': 'Erva baleeira, Manjericão, Alfavaca',
             'dia_grupo_horta': 'Sexta-feira 16h',
-            'multirao': '20/07/2026',
+            'mutirão': '20/07/2026',
             'data_atualizacao': '2026-06-12'
         },
         {
@@ -62,7 +62,7 @@ def carregar_dados():
             'responsavel': 'Fernanda Lima',
             'plantas_medicinais': 'Guaco, Boldo, Alfavaca',
             'dia_grupo_horta': '',
-            'multirao': '',
+            'mutirão': '',
             'data_atualizacao': '2026-06-01'
         }
     ]
