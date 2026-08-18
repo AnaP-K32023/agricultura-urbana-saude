@@ -43,10 +43,10 @@ Caps{% endblock %} {% block content %}
               <i class="fas fa-users me-1"></i>{{ horta.dia_grupo_horta }}
             </span>
           </p>
-          {% endif %} {% if horta.multirao and horta.multirao != 'Não' %}
+          {% endif %} {% if horta.mutirão and horta.mutirão != 'Não' %}
           <p>
-            <span class="badge-multirao">
-              <i class="fas fa-calendar me-1"></i>Multirão: {{ horta.multirao }}
+            <span class="badge-mutirão">
+              <i class="fas fa-calendar me-1"></i>Mutirão: {{ horta.mutirao }}
             </span>
           </p>
           {% endif %} {% if horta.data_atualizacao %}
