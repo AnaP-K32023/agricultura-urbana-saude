@@ -96,3 +96,14 @@ fazer o deploy
 
 ----> 🎉 Deu certo! O git push foi bem-sucedido! 🎉
 ----> 🚀 Próximo passo: publicar no Render.com
+
+render: usei a conta anepol2023@gmail ( igual ao GIT)
+1º conecta no git e depois no render.
+
+como atualiza: meze so no código no VSCODE e no terminal:
+
+git add .
+git commit -m "Corrige grafia da palavra mutirão"
+git push origin main
+
+Assim que o terminal terminar de rodar e você ler To https://github.com/... e main -> main, o GitHub já recebeu o código.
