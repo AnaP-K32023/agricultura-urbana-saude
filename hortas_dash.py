@@ -26,7 +26,7 @@ def carregar_dados():
             'responsavel': 'Jardim Saúde Ativa',
             'plantas_medicinais': 'Erva baleeira, Espinheira santa, Boldo, Hortelã',
             'dia_grupo_horta': 'Quarta-feira 14h',
-            'mutirão': '15/07/2026',
+            'multirao': '15/07/2026',  # CORRIGIDO: sem acento e com 'l'
             'data_atualizacao': '2026-06-15'
         },
         {
@@ -38,7 +38,7 @@ def carregar_dados():
             'responsavel': 'Maria Silva',
             'plantas_medicinais': 'Hortelã, Boldo, Melissa, Alecrim',
             'dia_grupo_horta': 'Terça-feira 09h',
-            'mutirão': 'Não',
+            'multirao': 'Não',  # CORRIGIDO
             'data_atualizacao': '2026-06-10'
         },
         {
@@ -50,7 +50,7 @@ def carregar_dados():
             'responsavel': 'Carlos Alberto',
             'plantas_medicinais': 'Erva baleeira, Manjericão, Alfavaca',
             'dia_grupo_horta': 'Sexta-feira 16h',
-            'mutirão': '20/07/2026',
+            'multirao': '20/07/2026',  # CORRIGIDO
             'data_atualizacao': '2026-06-12'
         },
         {
@@ -62,7 +62,7 @@ def carregar_dados():
             'responsavel': 'Fernanda Lima',
             'plantas_medicinais': 'Guaco, Boldo, Alfavaca',
             'dia_grupo_horta': '',
-            'mutirão': '',
+            'multirao': '',  # CORRIGIDO
             'data_atualizacao': '2026-06-01'
         }
     ]
@@ -102,7 +102,7 @@ def api_hortas():
                 "responsavel": row['responsavel'],
                 "plantas_medicinais": row['plantas_medicinais'],
                 "dia_grupo_horta": row['dia_grupo_horta'],
-                "multirao": row['multirao'],
+                "multirao": row['multirao'],  # Agora o DataFrame tem essa chave corretamente
                 "data_atualizacao": row['data_atualizacao']
             }
         }
@@ -133,9 +133,7 @@ def api_resumo():
         "total_plantas": df['plantas_medicinais'].str.split(',').explode().nunique()
     })
 
-#if __name__ == '__main__':
-#    app.run(debug=True, host='0.0.0.0', port=5000)
-if __name__ == '__main__': #PARA ONRENDER
+if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
